@@ -1,7 +1,4 @@
 #!/bin/bash
-
-
-
 if [ $# -lt 2 ]
 then
     echo "NOK: Incorrect number of arguments."

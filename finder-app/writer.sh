@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [ $# -lt 2 ]
 then
     echo "NOK: Incorrect number of arguments."
@@ -23,7 +22,7 @@ else
         result0=$(chmod 777 ${WRITEDIR})
         echo "result 0 : $?"
     fi
-    
+
     if [ ${#writestr} == 0 ]
     then
         echo "NOK: write cannot proceed due to empty string."
