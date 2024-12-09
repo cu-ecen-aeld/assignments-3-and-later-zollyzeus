@@ -10,7 +10,7 @@ int main(int argc,char *args[]){
     if(argc!=3)
     {
         printf("Usage : ./writer <filepath> <string> \n");
-        return -1;
+        return 1;
     }    
     
     // Open a log at user level
