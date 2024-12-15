@@ -113,7 +113,7 @@ sudo mknod -m 622 ${OUTDIR}/rootfs/dev/console c 5 1
 # TODO: Clean and build the writer utility
 echo "Building the writer app"
 cd ${FINDER_APP_DIR}
-#make clean
+make clean
 make CROSS_COMPILE=${CROSS_COMPILE}
 
 # TODO: Copy the finder related scripts and executables to the /home directory
