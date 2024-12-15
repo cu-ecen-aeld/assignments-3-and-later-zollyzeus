@@ -1,11 +1,11 @@
 #include "systemcalls.h"
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <stdbool.h>
+#include <string.h>
+#include <unistd.h>
 
 /**
  * @param cmd the command to execute with system()
@@ -32,8 +32,7 @@ bool do_system(const char *cmd)
     else
     {
         return true;
-    }
-    //    return WIFEXITED(retVal) && (WEXITSTATUS(retVal) == 0);
+    }   
 
 }
 
