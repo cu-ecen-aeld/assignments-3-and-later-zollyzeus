@@ -1,9 +1,11 @@
 #include "systemcalls.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
 
 /**
  * @param cmd the command to execute with system()
@@ -22,8 +24,8 @@ bool do_system(const char *cmd)
  *   or false() if it returned a failure
 */
     int retVal;
-
-    if(retVal=system(cmd) !=0)
+    retVal=system(cmd);
+    if(retVal !=0)
     {
         return false;    
     }
