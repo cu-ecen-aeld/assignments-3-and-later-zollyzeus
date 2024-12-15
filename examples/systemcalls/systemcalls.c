@@ -1,4 +1,8 @@
 #include "systemcalls.h"
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 
 /**
  * @param cmd the command to execute with system()
@@ -16,8 +20,18 @@ bool do_system(const char *cmd)
  *   and return a boolean true if the system() call completed with success
  *   or false() if it returned a failure
 */
+    int retVal;
 
-    return true;
+    if(retVal=system(cmd) !=0)
+    {
+        return false;    
+    }
+    else
+    {
+        return true;
+    }
+    //    return WIFEXITED(retVal) && (WEXITSTATUS(retVal) == 0);
+
 }
 
 /**
@@ -47,7 +61,7 @@ bool do_exec(int count, ...)
     command[count] = NULL;
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
-    command[count] = command[count];
+    command[count] = command[count];    
 
 /*
  * TODO:
@@ -58,10 +72,44 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
+    pid_t pid = fork();
+    if (pid == -1) {
+        perror("Error: Fork failed");
+        va_end(args);
+        return false;
+    }
 
-    va_end(args);
+    if (pid == 0) 
+    { 
+        // Child 
+        execv(command[0], command);
+        perror("Error: Execv failed");
+        exit(1);
+    } 
+    else 
+    {   
+        // Parent 
+        int pStat;
+        waitpid(pid, &pStat, 0);
+        va_end(args);
+        return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
+        /*
+        WIFEXITED(wstatus)
+                returns true if the child terminated normally, that is, by
+                calling exit(3) or _exit(2), or by returning from main().
 
-    return true;
+        WEXITSTATUS(wstatus)
+                returns the exit status of the child.  This consists of
+                the least significant 8 bits of the status argument that
+                the child specified in a call to exit(3) or _exit(2) or as
+                the argument for a return statement in main().  This macro
+                should be employed only if WIFEXITED returned true.
+        */
+
+    }
+
+    //va_end(args);
+    //return true;
 }
 
 /**
@@ -93,7 +141,46 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *
 */
 
-    va_end(args);
+    pid_t pid = fork();
+    if (pid == -1) {
+        perror("Error: Fork failed");
+        va_end(args);
+        return false;
+    }
 
-    return true;
+    if (pid == 0) 
+    { 
+        // Child 
+        
+        // Redirect stdout to the given output file
+        freopen(outputfile, "w", stdout);
+
+        execv(command[0], command);
+        perror("Error: Execv failed");
+        exit(1);
+    } 
+    else 
+    {   
+        // Parent 
+        int pStat;
+        waitpid(pid, &pStat, 0);
+        va_end(args);
+        return WIFEXITED(pStat) && (WEXITSTATUS(pStat) == 0);
+        /*
+        WIFEXITED(wstatus)
+                returns true if the child terminated normally, that is, by
+                calling exit(3) or _exit(2), or by returning from main().
+
+        WEXITSTATUS(wstatus)
+                returns the exit status of the child.  This consists of
+                the least significant 8 bits of the status argument that
+                the child specified in a call to exit(3) or _exit(2) or as
+                the argument for a return statement in main().  This macro
+                should be employed only if WIFEXITED returned true.
+        */
+
+    }
+
+    //va_end(args);
+    //return true;
 }
