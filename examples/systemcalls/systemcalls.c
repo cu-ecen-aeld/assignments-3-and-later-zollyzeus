@@ -92,7 +92,7 @@ bool do_exec(int count, ...)
         int pStat;
         waitpid(pid, &pStat, 0);
         va_end(args);
-        return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
+        return WIFEXITED(pStat) && (WEXITSTATUS(pStat) == 0);
         /*
         WIFEXITED(wstatus)
                 returns true if the child terminated normally, that is, by
